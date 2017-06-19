@@ -17,6 +17,7 @@ function init(){
   ctx = canvas.getContext("2d");
   images = new ImageLoader();
   images.load("pc","pc.png");
+  images.load("coin","coin_gold.png");
   map = new Map(Math.floor(canvas.height/40), Math.floor(canvas.width/40));
   map.images = images;
   map.setCells([
@@ -33,8 +34,8 @@ function init(){
     [1,1,1,1,1,1,1,1,1,1,1,1,1],
   ]);
   pc = new Sprite();
-  pc.x = 60;
-  pc.y = 60;
+  pc.x = 45;
+  pc.y = 310;
   pc.images = images;
   initControls();
   requestAnimationFrame(passo);
@@ -63,24 +64,24 @@ function passo(t){
   //ctx.rotate(Math.PI/4);
   ctx.clearRect(0,0, canvas.width, canvas.height);
   pc.mover(map, dt);
-  map.perseguir(pc);
+  // map.perseguir(pc);
   map.mover(dt);
   map.desenhar(ctx);
   pc.desenhar(ctx);
-  if(map.cells[pc.gy][pc.gx] == 2){
-    console.log("Pisou ")
-  }
-  if(map.cells[pc.gy][pc.gx] == 3){
+  // if(map.cells[pc.gy][pc.gx] == 2){
+  //   console.log("Pisou ")
+  // }
+  if(map.cells[pc.gy][pc.gx] instanceof Coin){
     tesourosConquistados++;
-      map.cells[pc.gy][pc.gx] = 0;
+    rCoin = map.enemies.indexOf(map.cells[pc.gy][pc.gx]);
+    map.enemies.splice(rCoin,1);
+    map.cells[pc.gy][pc.gx] = 0;
   }
   contarObjetos(map,pc.gy,pc.gx);
   ctx.fillStyle = "darkgreen";
   // ctx.fillText("Energia", 10, 30);
   // ctx.fillStyle = 'green';
   // ctx.fillRect(10,50,10,20);
-  ctx.fillText("Minas: " + minas, 450, 40);
-  ctx.fillText("Tesouros ao redor: " + tesouros, 450, 80);
   ctx.fillText("Tesouros conquistados: " + tesourosConquistados, 450, 120);
   anterior = t;
   //ctx.restore();
@@ -93,29 +94,28 @@ function passo(t){
 function initControls(){
   addEventListener('keydown', function(e){
     switch (e.keyCode) {
+      case 32:
+        pc.jump();
+        break;
       case 37:
         pc.vx = -100;
-        pc.vy = 0;
         pc.pose = 2;
         e.preventDefault();
         break;
       case 38:
-        pc.vy = -100;
-        pc.vx = 0;
-        pc.pose = 3;
-        e.preventDefault();
+        // pc.vy = -100;
+        // pc.pose = 3;
+        // e.preventDefault();
         break;
       case 39:
         pc.vx = 100;
-        pc.vy = 0;
         pc.pose = 0;
         e.preventDefault();
         break;
       case 40:
-        pc.vy = 100;
-        pc.vx = 0;
-        pc.pose = 1;
-        e.preventDefault();
+        // pc.vy = 100;
+        // pc.pose = 1;
+        // e.preventDefault();
         break;
       default:
 
@@ -130,7 +130,7 @@ function initControls(){
         break;
       case 38:
       case 40:
-        pc.vy = 0;
+        // pc.vy = 0;
         break;
       default:
 

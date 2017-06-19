@@ -3,9 +3,12 @@ function Sprite(){
   this.y = 0;
   this.vx = 0;
   this.vy = 0;
+  this.g = 100;
+  this.ay = 0;
   this.SIZE = 16;
   this.pose = 0;
   this.frame = 0;
+  this.imgSizes = [-32,-56, 64];
   this.poses = [
     {row: 11, col:1, frames:8, v: 4},
     {row: 10, col:1, frames:8, v: 4},
@@ -41,7 +44,7 @@ Sprite.prototype.desenharPose = function (ctx) {
     this.imgKey,
     this.poses[this.pose].row,
     Math.floor(this.frame),
-    -32,-56, 64
+    this.imgSizes[0],this.imgSizes[1],this.imgSizes[2]
   );
   ctx.restore();
 };
@@ -49,6 +52,7 @@ Sprite.prototype.desenharPose = function (ctx) {
 Sprite.prototype.mover = function (map, dt) {
   this.gx = Math.floor(this.x/map.SIZE);
   this.gy = Math.floor(this.y/map.SIZE);
+  this.vy = this.vy + (this.ay+this.g)*dt;
   //this.vy += 80*dt;
   if(this.vx>0 && map.cells[this.gy][this.gx+1]==1){
     this.x += Math.min((this.gx+1)*map.SIZE - (this.x+this.SIZE/2),this.vx*dt);
@@ -70,6 +74,10 @@ Sprite.prototype.mover = function (map, dt) {
   if(this.frame>this.poses[this.pose].frames-1){
     this.frame = 0;
   }
+};
+
+Sprite.prototype.jump = function(){
+    this.vy = -100;
 };
 
 Sprite.prototype.perseguir = function (alvo) {

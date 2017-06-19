@@ -40,7 +40,18 @@ Map.prototype.setCells = function (newCells) {
           // this.enemies.push(newEnemy);
           break;
        case 3:
-          this.cells[i][j] = 3;
+           coin = new Coin();
+           coin.sprite.images = this.images;
+           coin.sprite.imgKey = "coin";
+           coin.sprite.SIZE = 4;
+           coin.sprite.poses = [{row: 0, col:0, frames:8, v: 1}];
+           coin.sprite.imgSizes = [-20,-15,32];
+           console.log((i+0.5)*this.SIZE);
+           coin.sprite.y = (i+0.5)*this.SIZE;
+           coin.sprite.g = 0;
+           coin.sprite.x = (j+0.5)*this.SIZE;
+           this.cells[i][j] = coin;
+           this.enemies.push(coin);
           break;
         default:
           // this.cells[i][j] = 0;
